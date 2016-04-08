@@ -3,10 +3,10 @@
 
 from mmeowlink import commands
 from mmeowlink import lib
-from mmeowlink import cli
+from decocare.helpers import messages
 
 
-class BolusApp(cli.CommandApp):
+class BolusApp(messages.SendMsgApp):
     """ %(prog)s - Send bolus command to a pump.
 
     XXX: Be careful please!
@@ -22,16 +22,19 @@ class BolusApp(cli.CommandApp):
                             )
 
         group = parser.add_mutually_exclusive_group(required=True)
+
         group.add_argument('--515',
                            dest='strokes_per_unit',
                            action='store_const',
                            const=10
                            )
+
         group.add_argument('--554',
                            dest='strokes_per_unit',
                            action='store_const',
                            const=40
                            )
+
         group.add_argument('--strokes',
                            dest='strokes_per_unit',
                            type=int
