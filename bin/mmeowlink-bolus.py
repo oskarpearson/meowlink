@@ -7,6 +7,7 @@ from decocare.helpers import cli
 
 
 class BolusApp(cli.CommandApp):
+
     def customize_parser(self, parser):
         parser.add_argument('units',
                             type=float,
@@ -17,7 +18,7 @@ class BolusApp(cli.CommandApp):
         group.add_argument('--515',
                            dest='strokes_per_unit',
                            action='store_const',
-                           const=10,
+                           const=10
                            )
         group.add_argument('--554',
                            dest='strokes_per_unit',
@@ -28,13 +29,6 @@ class BolusApp(cli.CommandApp):
                            dest='strokes_per_unit',
                            type=int
                            )
-
-        parser.add_argument('--radio_type', dest='radio_type', default='subg_rfspy',
-                            choices=['mmcommander', 'subg_rfspy'])
-
-        parser.add_argument('--mmcommander', dest='radio_type', action='store_const', const='mmcommander', help="MMCommander radio type.")
-        parser.add_argument('--subg_rfspy', dest='radio_type', action='store_const', const='subg_rfspy', help="subg_rfspy radio type.")
-        parser = super(BolusApp, self).customize_parser(parser)
 
         return parser
 
@@ -59,5 +53,5 @@ def fmt_params(args):
 
 
 if __name__ == '__main__':
-    app = BolusApp( )
+    app = BolusApp()
     app.run(None)
