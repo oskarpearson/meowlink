@@ -16,12 +16,12 @@ class BolusApp(cli.CommandApp):
                             choices=['mmcommander', 'subg_rfspy'])
         parser.add_argument('--mmcommander', dest='radio_type', action='store_const', const='mmcommander')
         parser.add_argument('--subg_rfspy', dest='radio_type', action='store_const', const='subg_rfspy')
-        parser = super(BolusApp, self).customize_parser(parser)
         parser.add_argument('units', type=float, help="Amount of insulin to bolus.")
         group = parser.add_mutually_exclusive_group(required=True)
         group.add_argument('--515', dest='strokes_per_unit', action='store_const', const=10)
         group.add_argument('--554', dest='strokes_per_unit', action='store_const', const=40)
         group.add_argument('--strokes', dest='strokes_per_unit', type=int)
+        parser = super(BolusApp, self).customize_parser(parser)
         return parser
 
     def main(self, args):
