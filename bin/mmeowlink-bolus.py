@@ -3,10 +3,10 @@
 
 from decocare import commands
 from decocare import lib
-from decocare.helpers import messages
+from decocare.helpers.cli import CommandApp
 
 
-class BolusApp (messages.SendMsgApp):
+class BolusApp (CommandApp):
   """ %(prog)s - Send bolus command to a pump.
 
   XXX: Be careful please!
@@ -42,6 +42,7 @@ class BolusApp (messages.SendMsgApp):
     parser = super(BolusApp, self).customize_parser(parser)
 
     return parser
+
   def main (self, args):
     print args
     self.bolus(args);
