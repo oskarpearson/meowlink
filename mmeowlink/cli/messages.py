@@ -6,10 +6,8 @@ module to send arbitrary pump messages.
 from decocare import lib
 from decocare import commands
 from decocare.helpers import messages
-from decocare.helpers import cli
 from mmeowlink.handlers.stick import Pump
 from mmeowlink.link_builder import LinkBuilder
-import argcomplete
 
 
 class SendMsgApp(messages.SendMsgApp):
@@ -49,7 +47,7 @@ class SendMsgApp(messages.SendMsgApp):
         return
 
 
-class SendBolusApp(cli.CommandApp):
+class SendBolusApp(SendMsgApp):
     def customize_parser(self, parser):
         parser.add_argument('units',
                             type=float,
@@ -71,13 +69,6 @@ class SendBolusApp(cli.CommandApp):
                            dest='strokes_per_unit',
                            type=int
                            )
-
-        parser.add_argument('--radio_type', dest='radio_type', default='subg_rfspy',
-                            choices=['mmcommander', 'subg_rfspy'])
-
-        parser.add_argument('--mmcommander', dest='radio_type', action='store_const', const='mmcommander')
-        parser.add_argument('--subg_rfspy', dest='radio_type', action='store_const', const='subg_rfspy')
-        parser = super(SendBolusApp, self).customize_parser(parser)
 
         return parser
 
