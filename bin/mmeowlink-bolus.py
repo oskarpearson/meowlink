@@ -15,6 +15,8 @@ class BolusApp (cli.CommandApp):
   """
   def customize_parser (self, parser):
     parser.add_argument('--radio_type', dest='radio_type', default='subg_rfspy', choices=['mmcommander', 'subg_rfspy'])
+    parser.add_argument('--mmcommander', dest='radio_type', action='store_const', const='mmcommander')
+    parser.add_argument('--subg_rfspy', dest='radio_type', action='store_const', const='subg_rfspy')
     parser.add_argument('units',
                          type=float,
                          help="Amount of insulin to bolus."
