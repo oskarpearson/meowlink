@@ -4,5 +4,5 @@
 from mmeowlink.cli import messages
 
 if __name__ == '__main__':
-    app = messages.SendBolusApp()
+    app = messages.SendBolusApp( )
     app.run(None)
