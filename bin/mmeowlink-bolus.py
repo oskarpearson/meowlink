@@ -36,6 +36,11 @@ class BolusApp (messages.SendMsgApp):
                         type=int
                       )
 
+    parser.add_argument('--radio_type', dest='radio_type', default='subg_rfspy', choices=['mmcommander', 'subg_rfspy'])
+    parser.add_argument('--mmcommander', dest='radio_type', action='store_const', const='mmcommander')
+    parser.add_argument('--subg_rfspy', dest='radio_type', action='store_const', const='subg_rfspy')
+    parser = super(BolusApp, self).customize_parser(parser)
+
     return parser
   def main (self, args):
     print args
