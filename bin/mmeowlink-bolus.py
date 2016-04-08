@@ -15,24 +15,12 @@ class BolusApp(cli.CommandApp):
                             type=float,
                             help="Amount of insulin to bolus."
                             )
-        group = parser.add_mutually_exclusive_group(required=True)
-        group.add_argument('--515',
-                           dest='strokes_per_unit',
-                           action='store_const',
-                           const=10,
-                           help="."
-                           )
-        group.add_argument('--554',
-                           dest='strokes_per_unit',
-                           action='store_const',
-                           const=40,
-                           help="."
-                           )
-        group.add_argument('--strokes',
-                           dest='strokes_per_unit',
-                           type=int,
-                           help="."
-                           )
+        parser.add_argument('--515',
+                            dest='strokes_per_unit',
+                            action='store_const',
+                            const=10,
+                            help="."
+                            )
         parser.add_argument('--radio_type',
                             dest='radio_type',
                             default='subg_rfspy',
@@ -97,5 +85,5 @@ def fmt_params(args):
 
 
 if __name__ == '__main__':
-    app = BolusApp( )
+    app = BolusApp()
     app.run(None)
