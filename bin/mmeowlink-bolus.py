@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
 
-from decocare.helpers import messages
-from decocare import helpers
 from decocare import commands
 from decocare import lib
+from decocare.helpers import cli
 
 
-class BolusApp(helpers.cli.CommandApp):
+class BolusApp(cli.CommandApp):
     """
     mmeowlink adapter to decocare's SendMsgApp
     """
