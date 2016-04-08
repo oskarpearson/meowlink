@@ -24,15 +24,15 @@ class SendMsgApp(messages.SendMsgApp):
         group.add_argument('--strokes', dest='strokes_per_unit', type=int)
         return parser
 
-        def main(self, args):
-            print args
-            self.bolus(args);
+    def main(self, args):
+        print args
+        self.bolus(args);
 
-        def bolus(self, args):
-            query = commands.Bolus
-            kwds = dict(params=fmt_params(args))
-            resp = self.exec_request(self.pump, query, args=kwds, dryrun=args.dryrun, render_hexdump=False)
-            return resp
+    def bolus(self, args):
+        query = commands.Bolus
+        kwds = dict(params=fmt_params(args))
+        resp = self.exec_request(self.pump, query, args=kwds, dryrun=args.dryrun, render_hexdump=False)
+        return resp
 
 
 def fmt_params(args):
