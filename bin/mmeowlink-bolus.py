@@ -7,7 +7,7 @@ from mmeowlink import commands
 from mmeowlink import lib
 
 
-class SendMsgApp(helpers.cli.CommandApp):
+class BolusApp(helpers.cli.CommandApp):
     """
     mmeowlink adapter to decocare's SendMsgApp
     """
@@ -17,7 +17,7 @@ class SendMsgApp(helpers.cli.CommandApp):
                             choices=['mmcommander', 'subg_rfspy'])
         parser.add_argument('--mmcommander', dest='radio_type', action='store_const', const='mmcommander')
         parser.add_argument('--subg_rfspy', dest='radio_type', action='store_const', const='subg_rfspy')
-        parser = super(SendMsgApp, self).customize_parser(parser)
+        parser = super(BolusApp, self).customize_parser(parser)
         parser.add_argument('units', type=float, help="Amount of insulin to bolus.")
         group = parser.add_mutually_exclusive_group(required=True)
         group.add_argument('--515', dest='strokes_per_unit', action='store_const', const=10)
@@ -44,5 +44,5 @@ def fmt_params(args):
 
 
 if __name__ == '__main__':
-    app = messages.SendMsgApp()
+    app = BolusApp()
     app.run(None)
