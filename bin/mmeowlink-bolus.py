@@ -9,49 +9,55 @@ from mmeowlink.link_builder import LinkBuilder
 from mmeowlink.handlers.stick import Pump
 
 
-class BolusApp(cli.CommandApp):
+class BolusApp (cli.CommandApp):
+  """ %(prog)s - Send bolus command to a pump.
 
-    def main(self, args):
-        print args
-        self.bolus(args);
+  XXX: Be careful please!
 
-    def bolus(self, args):
-        query = commands.Bolus
-        kwds = dict(params=fmt_params(args))
-        resp = self.exec_request(self.pump, query, args=kwds, dryrun=args.dryrun, render_hexdump=False)
-        return resp
+  Units might be wrong.  Keep disconnected from pump until you trust it by
+  observing the right amount first.
+  """
+  def customize_parser (self, parser):
+    parser.add_argument('units',
+                         type=float,
+                         help="Amount of insulin to bolus."
+                       )
 
-    def prelude(self, args):
-        port = args.port
-        builder = LinkBuilder()
-        if port == 'scan':
-            port = builder.scan()
-        self.link = link = LinkBuilder().build(args.radio_type, port)
-        link.open()
-        # get link
-        # drain rx buffer
-        self.pump = Pump(self.link, args.serial)
-        if args.no_rf_prelude:
-            return
-        if not args.autoinit:
-            if args.init:
-                self.pump.power_control(minutes=args.session_life)
-        else:
-            self.autoinit(args)
-        self.sniff_model()
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--515',
+                        dest='strokes_per_unit',
+                        action='store_const',
+                        const=10
+                      )
+    group.add_argument('--554',
+                        dest='strokes_per_unit',
+                        action='store_const',
+                        const=40
+                      )
+    group.add_argument('--strokes',
+                        dest='strokes_per_unit',
+                        type=int
+                      )
 
-    def postlude(self, args):
-        # self.link.close( )
-        return
+    return parser
+  def main (self, args):
+    print args
+    self.bolus(args);
 
+  def bolus (self, args):
+    query = commands.Bolus
+    kwds = dict(params=fmt_params(args))
 
-def fmt_params(args):
-    strokes = int(float(args.units) * args.strokes_per_unit)
-    if (args.strokes_per_unit > 10):
-        return [lib.HighByte(strokes), lib.LowByte(strokes)]
-    return [strokes]
+    resp = self.exec_request(self.pump, query, args=kwds,
+                 dryrun=args.dryrun, render_hexdump=False)
+    return resp
 
+def fmt_params (args):
+  strokes = int(float(args.units) * args.strokes_per_unit)
+  if (args.strokes_per_unit > 10):
+    return [lib.HighByte(strokes), lib.LowByte(strokes)]
+  return [strokes]
 
 if __name__ == '__main__':
-    app = BolusApp( )
-    app.run(None)
+  app = BolusApp( )
+  app.run(None)
