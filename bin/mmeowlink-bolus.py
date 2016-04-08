@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
 
-from decocare import commands
+from mmeowlink import commands
 from decocare import lib
 from decocare.helpers import cli
 
