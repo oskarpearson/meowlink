@@ -9,6 +9,7 @@ setup(
     install_requires=["python-dateutil", "decocare"],
     scripts = [
       'bin/mmeowlink-send.py',
+      'bin/mmeowlink-bolus.py',
       'bin/mmtune.py'
     ]
 )
