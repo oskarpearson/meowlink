@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
 
-from mmeowlink import commands
+from mmeowlink import commands as cmds
 from decocare import lib
 from decocare.helpers import cli
 
@@ -29,7 +29,7 @@ class BolusApp(cli.CommandApp):
         self.bolus(args);
 
     def bolus(self, args):
-        query = commands.Bolus
+        query = cmds.Bolus
         kwds = dict(params=fmt_params(args))
         resp = self.exec_request(self.pump, query, args=kwds, dryrun=args.dryrun, render_hexdump=False)
         return resp
