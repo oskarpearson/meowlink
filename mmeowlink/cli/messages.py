@@ -48,29 +48,29 @@ class SendMsgApp(messages.SendMsgApp):
 
 
 class SendBolusApp(SendMsgApp):
-    def customize_parser(self, parser):
-        parser.add_argument('units',
-                            type=float,
-                            help="Amount of insulin to bolus."
-                            )
-
-        group = parser.add_mutually_exclusive_group(required=True)
-        group.add_argument('--515',
-                           dest='strokes_per_unit',
-                           action='store_const',
-                           const=10
-                           )
-        group.add_argument('--554',
-                           dest='strokes_per_unit',
-                           action='store_const',
-                           const=40
-                           )
-        group.add_argument('--strokes',
-                           dest='strokes_per_unit',
-                           type=int
-                           )
-
-        return parser
+    # def customize_parser(self, parser):
+    #     parser.add_argument('units',
+    #                         type=float,
+    #                         help="Amount of insulin to bolus."
+    #                         )
+    #
+    #     group = parser.add_mutually_exclusive_group(required=True)
+    #     group.add_argument('--515',
+    #                        dest='strokes_per_unit',
+    #                        action='store_const',
+    #                        const=10
+    #                        )
+    #     group.add_argument('--554',
+    #                        dest='strokes_per_unit',
+    #                        action='store_const',
+    #                        const=40
+    #                        )
+    #     group.add_argument('--strokes',
+    #                        dest='strokes_per_unit',
+    #                        type=int
+    #                        )
+    #
+    #     return parser
 
     def main(self, args):
         print args
