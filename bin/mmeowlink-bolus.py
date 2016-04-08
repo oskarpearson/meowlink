@@ -34,6 +34,29 @@ class SendMsgApp(messages.SendMsgApp):
         resp = self.exec_request(self.pump, query, args=kwds, dryrun=args.dryrun, render_hexdump=False)
         return resp
 
+    def prelude(self, args):
+        port = args.port
+        builder = LinkBuilder()
+        if port == 'scan':
+            port = builder.scan()
+        self.link = link = LinkBuilder().build(args.radio_type, port)
+        link.open()
+        # get link
+        # drain rx buffer
+        self.pump = Pump(self.link, args.serial)
+        if args.no_rf_prelude:
+            return
+        if not args.autoinit:
+            if args.init:
+                self.pump.power_control(minutes=args.session_life)
+        else:
+            self.autoinit(args)
+        self.sniff_model()
+
+    def postlude(self, args):
+        # self.link.close( )
+        return
+
 
 def fmt_params(args):
     strokes = int(float(args.units) * args.strokes_per_unit)
