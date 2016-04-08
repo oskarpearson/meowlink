@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
 
+from decocare.helpers import messages
 from decocare import helpers
 from decocare import commands
 from decocare import lib
