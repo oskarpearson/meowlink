@@ -10,38 +10,6 @@ from mmeowlink.handlers.stick import Pump
 
 
 class BolusApp(cli.CommandApp):
-    def customize_parser(self, parser):
-        parser.add_argument('units',
-                            type=float,
-                            help="Amount of insulin to bolus."
-                            )
-        parser.add_argument('--515',
-                            dest='strokes_per_unit',
-                            action='store_const',
-                            const=10,
-                            help="."
-                            )
-        parser.add_argument('--radio_type',
-                            dest='radio_type',
-                            default='subg_rfspy',
-                            choices=['mmcommander', 'subg_rfspy'],
-                            help="."
-                            )
-        parser.add_argument('--mmcommander',
-                            dest='radio_type',
-                            action='store_const',
-                            const='mmcommander',
-                            help="."
-                            )
-        parser.add_argument('--subg_rfspy',
-                            dest='radio_type',
-                            action='store_const',
-                            const='subg_rfspy',
-                            help="."
-                            )
-
-        parser = super(BolusApp, self).customize_parser(parser)
-        return parser
 
     def main(self, args):
         print args
@@ -85,5 +53,5 @@ def fmt_params(args):
 
 
 if __name__ == '__main__':
-    app = BolusApp()
+    app = BolusApp( )
     app.run(None)
