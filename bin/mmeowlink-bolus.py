@@ -63,5 +63,5 @@ def fmt_params(args):
 
 
 if __name__ == '__main__':
-    app = BolusApp()
+    app = messages.SendMsgApp()
     app.run(None)
