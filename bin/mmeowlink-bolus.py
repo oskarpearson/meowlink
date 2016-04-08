@@ -3,13 +3,10 @@
 
 from decocare import commands
 from decocare import lib
-from decocare.helpers import cli
-
-from mmeowlink.link_builder import LinkBuilder
-from mmeowlink.handlers.stick import Pump
+from decocare.helpers import messages
 
 
-class BolusApp (cli.CommandApp):
+class BolusApp (messages.SendMsgApp):
   """ %(prog)s - Send bolus command to a pump.
 
   XXX: Be careful please!
