@@ -24,10 +24,6 @@ class BolusApp(cli.CommandApp):
         parser = super(BolusApp, self).customize_parser(parser)
         return parser
 
-    def main(self, args):
-        print args
-        self.bolus(args);
-
     def bolus(self, args):
         query = cmds.Bolus
         kwds = dict(params=fmt_params(args))
