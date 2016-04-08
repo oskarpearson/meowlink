@@ -3,7 +3,7 @@
 
 from mmeowlink import commands
 from mmeowlink import lib
-from decocare.helpers import messages
+from mmeowlink.cli import messages
 
 
 class BolusApp(messages.SendMsgApp):
