@@ -17,7 +17,7 @@ class BolusApp(cli.CommandApp):
         group.add_argument('--515',
                            dest='strokes_per_unit',
                            action='store_const',
-                           const=10
+                           const=10,
                            )
         group.add_argument('--554',
                            dest='strokes_per_unit',
@@ -32,8 +32,8 @@ class BolusApp(cli.CommandApp):
         parser.add_argument('--radio_type', dest='radio_type', default='subg_rfspy',
                             choices=['mmcommander', 'subg_rfspy'])
 
-        parser.add_argument('--mmcommander', dest='radio_type', action='store_const', const='mmcommander')
-        parser.add_argument('--subg_rfspy', dest='radio_type', action='store_const', const='subg_rfspy')
+        parser.add_argument('--mmcommander', dest='radio_type', action='store_const', const='mmcommander', help="MMCommander radio type.")
+        parser.add_argument('--subg_rfspy', dest='radio_type', action='store_const', const='subg_rfspy', help="subg_rfspy radio type.")
         parser = super(BolusApp, self).customize_parser(parser)
 
         return parser
