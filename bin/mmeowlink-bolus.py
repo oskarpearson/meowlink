@@ -38,6 +38,7 @@ class BolusApp (cli.CommandApp):
                         type=int
                       )
 
+    parser = super(BolusApp, self).customize_parser(parser)
     return parser
   def main (self, args):
     print args
