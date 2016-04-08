@@ -53,9 +53,8 @@ class BolusApp (CommandApp):
           port = builder.scan()
       self.link = link = LinkBuilder().build(args.radio_type, port)
       link.open()
-      # get link
-      # drain rx buffer
       self.pump = Pump(self.link, args.serial)
+      self.model = None
       if args.no_rf_prelude:
           return
       if not args.autoinit:
