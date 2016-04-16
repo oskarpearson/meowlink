@@ -1,9 +1,10 @@
 import logging
 import serial
 
+import decocare
 from .. import fuser
 
-io  = logging.getLogger( )
+io  = logging.getLogger(decocare.__name__).getChild(__name__)
 log = io.getChild(__name__)
 
 class NotImplementedException (Exception):

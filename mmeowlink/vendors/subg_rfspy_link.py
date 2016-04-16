@@ -6,6 +6,7 @@ import binascii
 import logging
 import time
 
+import decocare
 from decocare.lib import hexdump, CRC8
 
 from .. fourbysix import FourBySix
@@ -14,7 +15,7 @@ from .. exceptions import InvalidPacketReceived, CommsException, SubgRfspyVersio
 from serial_interface import SerialInterface
 from serial_rf_spy import SerialRfSpy
 
-io  = logging.getLogger( )
+io  = logging.getLogger(decocare.__name__).getChild(__name__)
 log = io.getChild(__name__)
 
 class SubgRfspyLink(SerialInterface):

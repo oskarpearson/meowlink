@@ -1,4 +1,5 @@
 
+import decocare
 from decocare import session, lib, commands
 from .. packets.rf import Packet
 from .. exceptions import InvalidPacketReceived, CommsException
@@ -8,7 +9,7 @@ import time
 
 from decocare import lib
 
-io  = logging.getLogger( )
+io  = logging.getLogger(decocare.__name__).getChild(__name__)
 log = io.getChild(__name__)
 
 class Sender (object):
@@ -72,7 +73,7 @@ class Sender (object):
   def respond (self, resp):
     if resp.valid and resp.serial == self.command.serial:
       if resp.op == 0x06 and self.sent_params:
-        self.command.respond(bytearray(64)) 
+        self.command.respond(bytearray(64))
       elif resp.op == self.command.code:
         self.unframe(resp)
 

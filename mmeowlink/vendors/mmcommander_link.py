@@ -5,12 +5,13 @@ import array
 import logging
 import time
 
+import decocare
 from decocare.lib import hexdump
 from .. exceptions import InvalidPacketReceived, CommsException, MMCommanderNotWriteable
 
 from serial_interface import SerialInterface
 
-io  = logging.getLogger( )
+io  = logging.getLogger(decocare.__name__).getChild(__name__)
 log = io.getChild(__name__)
 
 class MMCommanderLink(SerialInterface):

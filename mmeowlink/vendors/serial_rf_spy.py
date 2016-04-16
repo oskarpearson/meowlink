@@ -33,8 +33,9 @@ import serial
 import time
 from .. exceptions import CommsException
 import logging
+import decocare
 
-io  = logging.getLogger( )
+io  = logging.getLogger(decocare.__name__).getChild(__name__)
 log = io.getChild(__name__)
 
 class SerialRfSpy:

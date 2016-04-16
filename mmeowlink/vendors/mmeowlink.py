@@ -46,7 +46,7 @@ def main (args, app):
 use = Registry( )
 
 def setup_logging (self):
-  log = logging.getLogger(decocare.__name__)
+  log = logging.getLogger(decocare.__name__).getChild(__name__)
   level = getattr(logging, self.device.get('logLevel', 'WARN'))
   address = self.device.get('logAddress', '/dev/log')
   log.setLevel(level)
@@ -73,7 +73,7 @@ class mmtune (medtronic.MedtronicTask):
   """ Scan for best frequency
 
   This will attempt to communicate with the pump at a range
-  of frequencies, and set your radio to the frequency it 
+  of frequencies, and set your radio to the frequency it
   gets the best results on.
   """
   uart = None        # Unused attribute - but is required for OpenAPS
