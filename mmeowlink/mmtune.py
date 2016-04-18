@@ -7,8 +7,8 @@ from mmeowlink.vendors.subg_rfspy_link import SubgRfspyLink
 
 class MMTune:
   FREQ_RANGES = {
-    'US': { 'start': 916.5, 'end': 916.9, 'default': 916.630 },
-    'WW': { 'start': 867.5, 'end': 868.5, 'default': 868.328 }
+    'US': { 'start': 916.5, 'end': 916.9, 'default': 916.63 },
+    'WW': { 'start': 868.3, 'end': 868.9, 'default': 868.36 }
   }
 
   def __init__(self, link, pumpserial, radio_locale='US'):
