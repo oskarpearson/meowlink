@@ -106,12 +106,12 @@ class SerialRfSpy:
     self.send_command(self.CMD_GET_STATE)
     status = self.get_response(timeout=1)
     if status == "OK":
-      print "subg_rfspy status: " + status
+      log.info("subg_rfspy status: " + status)
 
     self.send_command(self.CMD_GET_VERSION)
     version = self.get_response(timeout=1)
     if len(version) >= 3:
-      print "Version: " + version
+      log.info("Version: " + version)
 
     if not status or not version:
       raise CommsException("Could not get subg_rfspy state or version. Have you got the right port/device and radio_type?")

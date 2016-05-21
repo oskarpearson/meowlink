@@ -19,6 +19,7 @@ setup(
     ],
     scripts = [
       'bin/mmeowlink-bolus.py',
+      'bin/mmeowlink-any-pump-comms.py',
       'bin/mmeowlink-rf-dump.py',
       'bin/mmeowlink-send.py',
       'bin/mmtune.py'
