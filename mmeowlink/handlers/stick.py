@@ -160,6 +160,8 @@ class Sender (object):
         self.restart_command()
       time.sleep(self.RETRY_BACKOFF * retry_count)
 
+use_spi = True # FIXME
+
 class Repeater (Sender):
 
   def __call__ (self, command, repetitions=None, ack_wait_seconds=None):
@@ -170,30 +172,37 @@ class Repeater (Sender):
     buf = pkt.assemble( )
     log.debug('Sending repeated message %s' % (str(buf).encode('hex')))
 
-    self.link.write(buf, repetitions=repetitions)
+    if use_spi:  # FIXME
+      buf = self.link.write_and_read(buf, repetitions=repetitions, timeout=ack_wait_seconds)
+      if len(buf) == 0:
+        return False
+      resp = Packet.fromBuffer(buf)
+      return self.responds_to(resp) and resp.op == 0x06
+    else:
+      self.link.write(buf, repetitions=repetitions)
 
-    # The radio takes a while to send all the packets, so wait for a bit before
-    # trying to talk to the radio, otherwise we can interrupt it.
-    #
-    # This multiplication factor is based on
-    # testing, which shows that it takes 8.04 seconds to send 500 packets
-    # (8.04/500 =~ 0.016 packets per second).
-    # We don't want to miss the reply, so take off a bit:
-    time.sleep((repetitions * 0.016) - 2.2)
+      # The radio takes a while to send all the packets, so wait for a bit before
+      # trying to talk to the radio, otherwise we can interrupt it.
+      #
+      # This multiplication factor is based on
+      # testing, which shows that it takes 8.04 seconds to send 500 packets
+      # (8.04/500 =~ 0.016 packets per second).
+      # We don't want to miss the reply, so take off a bit:
+      time.sleep((repetitions * 0.016) - 2.2)
 
-    # Sometimes the first packet received will be mangled by the simultaneous
-    # transmission of a CGMS and the pump. We thus retry on invalid packets
-    # being received. Note how ever that we do *not* retry on timeouts, since
-    # our wait period is typically very long here, which would lead to long
-    # waits with no activity. It's better to fail and retry externally
-    while (time.time() <= start + ack_wait_seconds):
-      try:
-        self.wait_for_ack()
-        return True
-      except CommsException, InvalidPacketReceived:
-        log.error("Response not received - retrying at %s" % time.time)
+      # Sometimes the first packet received will be mangled by the simultaneous
+      # transmission of a CGMS and the pump. We thus retry on invalid packets
+      # being received. Note how ever that we do *not* retry on timeouts, since
+      # our wait period is typically very long here, which would lead to long
+      # waits with no activity. It's better to fail and retry externally
+      while (time.time() <= start + ack_wait_seconds):
+        try:
+          self.wait_for_ack()
+          return True
+        except CommsException, InvalidPacketReceived:
+          log.error("Response not received - retrying at %s" % time.time)
 
-    return False
+      return False
 
 class Pump (session.Pump):
   STANDARD_RETRY_COUNT = 3
@@ -209,7 +218,10 @@ class Pump (session.Pump):
     self.command = commands.PowerControl(**dict(minutes=minutes, serial=self.serial))
     repeater = Repeater(self.link)
 
-    status = repeater(self.command, repetitions=500, ack_wait_seconds=20)
+    if use_spi:  # FIXME
+      status = repeater(self.command, repetitions=100, ack_wait_seconds=10)
+    else:
+      status = repeater(self.command, repetitions=500, ack_wait_seconds=20)
 
     if status:
       return True
