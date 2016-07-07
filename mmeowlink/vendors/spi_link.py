@@ -19,7 +19,7 @@ class SPILink:
     def write(self, string, repetitions=1, timeout=None):
         if timeout is None:
             timeout = self.timeout
-        data = str(string).encode('hex_codec')
+        data = str(string).encode('base64')
         usecs = int(timeout * 1000000)
         json.dump({'Command': 'send_packet',
                    'Data': data,
@@ -40,7 +40,7 @@ class SPILink:
     def write_and_read(self, string, repetitions=1, timeout=None):
         if timeout is None:
             timeout = self.timeout
-        data = str(string).encode('hex')
+        data = str(string).encode('base64')
         usecs = int(timeout * 1000000)
         json.dump({'Command': 'send_and_listen',
                    'Data': data,
@@ -55,7 +55,7 @@ class SPILink:
         response = json.loads(self.response_channel.readline())
         if response['Error'] or len(response['Data']) == 0:
             raise CommsException("No response or receive error")
-        return bytearray(response['Data'].decode('hex'))
+        return bytearray(response['Data'].decode('base64'))
 
     def ignore_response(self):
         response = json.loads(self.response_channel.readline())
