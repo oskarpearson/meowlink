@@ -30,7 +30,7 @@ def configure_add_app (app, parser):
 def configure_app (app, parser):
   parser.add_argument(
     'radio_type',
-    help='Radio type: mmcommander or subg_rfspy'
+    help='Radio type: mmcommander, subg_rfspy, or spi'
   )
   parser.add_argument(
     'port', default='scan',
