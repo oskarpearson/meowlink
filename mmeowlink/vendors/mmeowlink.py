@@ -53,7 +53,7 @@ def setup_logging (self):
   mmlog = logging.getLogger('mmeowlink')
   level = getattr(logging, self.device.get('DECOCARE_LOG_LEVEL', 'WARN'))
   mmlevel = getattr(logging, self.device.get('logLevel', 'INFO'))
-  address = self.device.get('logAddress', '/dev/log')
+  address = self.device.get('log_address', '/dev/log')
   log.setLevel(level)
   mmlog.setLevel(mmlevel)
   for previous in log.handlers[:]:

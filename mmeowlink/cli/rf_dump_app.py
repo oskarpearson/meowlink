@@ -40,3 +40,5 @@ class RfDumpApp(BaseMMeowlinkApp):
           print "%s (N/A db) - %s" % (ts, hexify(resp).upper())
       except CommsException as e:
         pass
+      except InvalidPacketReceived:
+        print "%s (N/A db) - Corrupt packet" % ts
