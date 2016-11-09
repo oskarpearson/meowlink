@@ -1,3 +1,4 @@
+import atexit
 import json
 import subprocess
 import sys
@@ -12,9 +13,14 @@ class SPILink:
                                         stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE,
                                         stderr=sys.stderr)
+        atexit.register(self.exit)
         self.request_channel = self.backend.stdin
         self.response_channel = self.backend.stdout
         self.timeout = 1
+
+    def exit(self):
+        self.request_channel.close()
+        self.backend.wait()
 
     def write(self, string, repetitions=1, timeout=None):
         if timeout is None:
