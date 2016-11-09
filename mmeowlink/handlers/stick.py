@@ -2,6 +2,7 @@
 from decocare import session, lib, commands
 from .. packets.rf import Packet
 from .. exceptions import InvalidPacketReceived, CommsException
+from .. vendors.spi_link import SPILink
 
 import logging
 import time
@@ -160,8 +161,6 @@ class Sender (object):
         self.restart_command()
       time.sleep(self.RETRY_BACKOFF * retry_count)
 
-use_spi = True # FIXME
-
 class Repeater (Sender):
 
   def __call__ (self, command, repetitions=None, ack_wait_seconds=None):
@@ -172,7 +171,7 @@ class Repeater (Sender):
     buf = pkt.assemble( )
     log.debug('Sending repeated message %s' % (str(buf).encode('hex')))
 
-    if use_spi:  # FIXME
+    if type(self.link) == SPILink:
       buf = self.link.write_and_read(buf, repetitions=repetitions, timeout=ack_wait_seconds)
       if len(buf) == 0:
         return False
@@ -218,7 +217,7 @@ class Pump (session.Pump):
     self.command = commands.PowerControl(**dict(minutes=minutes, serial=self.serial))
     repeater = Repeater(self.link)
 
-    if use_spi:  # FIXME
+    if type(self.link) == SPILink:
       status = repeater(self.command, repetitions=100, ack_wait_seconds=10)
     else:
       status = repeater(self.command, repetitions=500, ack_wait_seconds=20)
