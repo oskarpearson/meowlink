@@ -5,22 +5,24 @@ import sys
 
 from .. exceptions import CommsException
 
-spilink_backend = '/usr/local/bin/spilink'
-
 class SPILink:
+    backend = None
+    program = '/usr/local/bin/spilink'
+
     def __init__(self):
-        self.backend = subprocess.Popen(spilink_backend,
-                                        stdin=subprocess.PIPE,
-                                        stdout=subprocess.PIPE,
-                                        stderr=sys.stderr)
-        atexit.register(self.exit)
-        self.request_channel = self.backend.stdin
-        self.response_channel = self.backend.stdout
+        if SPILink.backend is None:
+            SPILink.backend = subprocess.Popen(SPILink.program,
+                                               stdin=subprocess.PIPE,
+                                               stdout=subprocess.PIPE,
+                                               stderr=sys.stderr)
+            atexit.register(self.exit)
+        self.request_channel = SPILink.backend.stdin
+        self.response_channel = SPILink.backend.stdout
         self.timeout = 1
 
     def exit(self):
-        self.request_channel.close()
-        self.backend.wait()
+        SPILink.backend.stdin.close()
+        SPILink.backend.wait()
 
     def write(self, string, repetitions=1, timeout=None):
         if timeout is None:
