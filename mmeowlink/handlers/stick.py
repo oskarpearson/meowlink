@@ -170,7 +170,14 @@ class Repeater (Sender):
     buf = pkt.assemble( )
     log.debug('Sending repeated message %s' % (str(buf).encode('hex')))
 
-    self.link.write(buf, repetitions=repetitions)
+    try:
+      buf = self.link.write_and_read(buf, repetitions=repetitions, timeout=ack_wait_seconds)
+      resp = Packet.fromBuffer(buf)
+      if self.responds_to(resp):
+        if resp.op == 0x06:
+          return True
+    except AttributeError:
+      self.link.write(buf, repetitions=repetitions)
 
     # The radio takes a while to send all the packets, so wait for a bit before
     # trying to talk to the radio, otherwise we can interrupt it.

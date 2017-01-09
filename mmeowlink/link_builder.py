@@ -2,6 +2,7 @@ from mmeowlink.exceptions import UnknownLinkType
 
 from mmeowlink.vendors.mmcommander_link import MMCommanderLink
 from mmeowlink.vendors.subg_rfspy_link import SubgRfspyLink
+from mmeowlink.vendors.rileylink import RileyLink
 import glob
 
 class LinkBuilder():
@@ -14,5 +15,7 @@ class LinkBuilder():
       return MMCommanderLink(port)
     elif radio_type == 'subg_rfspy':
       return SubgRfspyLink(port)
+    elif radio_type == 'rileylink':
+      return RileyLink(port)
     else:
       raise UnknownLinkType("Unknown radio type '%s' - check parameters" % radio_type)

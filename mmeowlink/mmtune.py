@@ -4,6 +4,7 @@ import sys
 from decocare.lib import CRC8
 from mmeowlink.exceptions import CommsException,InvalidPacketReceived
 from mmeowlink.vendors.subg_rfspy_link import SubgRfspyLink
+from mmeowlink.vendors.rileylink import RileyLink
 
 class MMTune:
   FREQ_RANGES = {
@@ -16,7 +17,7 @@ class MMTune:
 
     # MMTune can only be used with the SubgRfspy firmware, as MMCommander
     # cannot change frequencies
-    assert type(link) == SubgRfspyLink
+    assert ((type(link) == SubgRfspyLink) or (type(link) == RileyLink))
 
     self.pumpserial = pumpserial
     self.radio_locale = radio_locale
