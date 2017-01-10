@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-
+import os
 import sys
+import json
 from decocare.lib import CRC8
 from mmeowlink.exceptions import CommsException,InvalidPacketReceived
 from mmeowlink.vendors.subg_rfspy_link import SubgRfspyLink
@@ -11,7 +12,7 @@ class MMTune:
     'WW': { 'start': 868.150, 'end': 868.750, 'default': 868.328 }
   }
 
-  def __init__(self, link, pumpserial, radio_locale='US'):
+  def __init__(self, link, pumpserial, radio_locale='WW'):
     self.link = link
 
     # MMTune can only be used with the SubgRfspy firmware, as MMCommander
@@ -22,20 +23,46 @@ class MMTune:
     self.radio_locale = radio_locale
 
     self.scan_range = self.FREQ_RANGES[self.radio_locale]
+    self.scan_range = self.FREQ_RANGES['WW']
 
   def run(self):
     #print "waking..."
     self.wakeup()
 
+    use_old_settings = False
+    filepath = 'mmtune_old.json'
+    if os.path.isfile(filepath) and os.path.getsize(filepath) > 0:
+      use_old_settings = True
+
+    if use_old_settings:
+      try:
+        old_run = open('mmtune_old.json', 'r')
+        data = json.load(old_run)
+        old_run.close()
+        if data["usedDefault"] == False:
+          testFreq = data["setFreq"]
+          self.link.set_base_freq(testFreq)
+          results = []
+          results.append(self.run_trial("%0.3f" % testFreq))
+          if results[0][1] == 5 and results[0][2] > -90:
+            output = {'scanDetails': results, 'setFreq': testFreq, 'usedDefault': False}
+            return output
+      except ValueError:
+        pass 
+
     #print "scanning..."
     results = self.scan_over_freq(self.scan_range['start'], self.scan_range['end'], 25)
     results_sorted = list(reversed(sorted(results, key=lambda x: x[1:])))
 
+    top_results = [result for result in results if result[2] == results_sorted[0][2]]
+    results_sorted = list(sorted(top_results, key=lambda x: x[0:]))
+    chosen_result = len(results_sorted) // 2
+
     set_freq = self.scan_range['default']
     used_default = True
-    if results_sorted[0][1] > 0:
+    if results_sorted[chosen_result][1] > 0:
       used_default = False
-      set_freq = float(results_sorted[0][0])
+      set_freq = float(results_sorted[chosen_result][0])
     self.link.set_base_freq(set_freq)
     output = {'scanDetails': results, 'setFreq': set_freq, 'usedDefault': used_default}
     return output
