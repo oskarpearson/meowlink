@@ -170,19 +170,10 @@ class Repeater (Sender):
     buf = pkt.assemble( )
     log.debug('Sending repeated message %s' % (str(buf).encode('hex')))
 
-    self.link.write(buf, repetitions=repetitions)
-
-    # The radio takes a while to send all the packets, so wait for a bit before
-    # trying to talk to the radio, otherwise we can interrupt it.
-    #
-    # This multiplication factor is based on
-    # testing, which shows that it takes 8.04 seconds to send 500 packets
-    # (8.04/500 =~ 0.016 packets per second).
-    # We don't want to miss the reply, so take off a bit:
-    time.sleep((repetitions * 0.016) - 2.2)
+    self.link.write(buf, repetitions=repetitions, timeout=0.024 * repetitions)
 
     try:
-      self.wait_for_ack()
+      self.wait_for_ack(timeout=ack_wait_seconds)
       return True
     except CommsException, InvalidPacketReceived:
       log.error("%s - Response not received - retrying" % time.time())
@@ -223,7 +214,7 @@ class Pump (session.Pump):
       self.command = commands.PowerControl(**dict(minutes=minutes, serial=self.serial))
       repeater = Repeater(self.link)
 
-      status = repeater(self.command, repetitions=500, ack_wait_seconds=20)
+      status = repeater(self.command, repetitions=500, ack_wait_seconds=12)
 
       if status:
         return True
