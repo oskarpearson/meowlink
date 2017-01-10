@@ -43,7 +43,7 @@ class MMTune:
           self.link.set_base_freq(testFreq)
           results = []
           results.append(self.run_trial("%0.3f" % testFreq))
-          if results[0][1] == 5 and results[0][2] > -90:
+          if results[0][1] == 5 and results[0][2] > -80:
             output = {'scanDetails': results, 'setFreq': testFreq, 'usedDefault': False}
             return output
       except ValueError:
