@@ -2,6 +2,7 @@ from datetime import datetime
 
 from .. hex_handling import hexify
 from .. exceptions import CommsException
+from mmeowlink.exceptions import CommsException,InvalidPacketReceived
 
 from mmeowlink.vendors.mmcommander_link import MMCommanderLink
 from mmeowlink.vendors.subg_rfspy_link import SubgRfspyLink
@@ -41,4 +42,5 @@ class RfDumpApp(BaseMMeowlinkApp):
       except CommsException as e:
         pass
       except InvalidPacketReceived:
+        ts = datetime.now()
         print "%s (N/A db) - Corrupt packet" % ts

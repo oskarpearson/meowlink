@@ -1,6 +1,8 @@
 import time
 
+from datetime import datetime
 from exceptions import CommsException
+from mmeowlink.exceptions import CommsException,InvalidPacketReceived
 from hex_handling import hexify
 
 from vendors.mmcommander_link import MMCommanderLink
@@ -30,6 +32,8 @@ class DetectRadioComms(object):
           hex_string = hexify(resp).upper()
       except CommsException as e:
         pass
+      except InvalidPacketReceived:
+        print "%s (N/A db) - Corrupt packet" % datetime.now()
 
       # EG:   A7 12 31 23 22 5D .. ..
       # POS:  01234567890123456789
