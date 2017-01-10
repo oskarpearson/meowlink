@@ -57,6 +57,8 @@ class SerialRfSpy:
 
   def do_command(self, command, param="", timeout=0):
     self.send_command(command, param, timeout=timeout)
+    if command == self.CMD_RESET:
+	time.sleep(1)
     return self.get_response(timeout=timeout)
 
   def send_command(self, command, param="", timeout=1):
@@ -66,11 +68,13 @@ class SerialRfSpy:
 
     self.ser.write_timeout = timeout
 
-    self.ser.write(chr(command))
-    log.debug("command %d" % command)
-    if len(param) > 0:
-      log.debug("params: %s" % str(param).encode('hex'))
-      self.ser.write(param)
+    cmd_str = chr(command) + param
+
+    self.ser.write(cmd_str)
+    log.debug("command: " + cmd_str)
+    #if len(param) > 0:
+    #  log.debug("params: %s" % str(param).encode('hex'))
+    #  self.ser.write(param)
 
     self.ser.write_timeout = self.default_write_timeout
 

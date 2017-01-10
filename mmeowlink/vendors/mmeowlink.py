@@ -53,7 +53,7 @@ def setup_logging (self):
   mmlog = logging.getLogger('mmeowlink')
   level = getattr(logging, self.device.get('DECOCARE_LOG_LEVEL', 'WARN'))
   mmlevel = getattr(logging, self.device.get('logLevel', 'INFO'))
-  address = self.device.get('logAddress', '/dev/log')
+  address = self.device.get('log_address', '/dev/log')
   log.setLevel(level)
   mmlog.setLevel(mmlevel)
   for previous in log.handlers[:]:
@@ -91,7 +91,10 @@ class mmtune (medtronic.MedtronicTask):
     # setup_logging(self)
     setup_medtronic_link(self)
     serial = self.device.get('serial')
-    self.mmtune = MMTune(self.pump.link, serial)
+    radio_locale = self.device.get('radio_locale')
+    if not radio_locale:
+      radio_locale = 'US'
+    self.mmtune = MMTune(self.pump.link, serial, radio_locale)
 
   def main (self, args, app):
     return self.mmtune.run( )

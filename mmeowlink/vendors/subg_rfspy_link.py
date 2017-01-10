@@ -38,7 +38,7 @@ class SubgRfspyLink(SerialInterface):
 
   # Which version of subg_rfspy do we support?
   UINT16_TIMEOUT_VERSIONS = ["0.6"]
-  SUPPORTED_VERSIONS = ["0.6", "0.7", "0.8"]
+  SUPPORTED_VERSIONS = ["0.6", "0.7", "0.8", "0.9"]
 
   RFSPY_ERRORS = {
     0xaa: "Timeout",
@@ -67,7 +67,8 @@ class SubgRfspyLink(SerialInterface):
 
   def check_setup(self):
     self.serial_rf_spy = SerialRfSpy(self.serial)
-
+#    if self.device.find('spi') >= 0:
+#        self.serial_rf_spy.do_command(SerialRfSpy.CMD_RESET, param="", timeout=1)
     self.serial_rf_spy.sync()
 
     # Check it's a SerialRfSpy device by retrieving the firmware version

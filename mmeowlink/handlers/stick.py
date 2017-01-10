@@ -181,17 +181,11 @@ class Repeater (Sender):
     # We don't want to miss the reply, so take off a bit:
     time.sleep((repetitions * 0.016) - 2.2)
 
-    # Sometimes the first packet received will be mangled by the simultaneous
-    # transmission of a CGMS and the pump. We thus retry on invalid packets
-    # being received. Note how ever that we do *not* retry on timeouts, since
-    # our wait period is typically very long here, which would lead to long
-    # waits with no activity. It's better to fail and retry externally
-    while (time.time() <= start + ack_wait_seconds):
-      try:
-        self.wait_for_ack()
-        return True
-      except CommsException, InvalidPacketReceived:
-        log.error("Response not received - retrying at %s" % time.time)
+    try:
+      self.wait_for_ack()
+      return True
+    except CommsException, InvalidPacketReceived:
+      log.error("%s - Response not received - retrying" % time.time())
 
     return False
 
@@ -203,26 +197,46 @@ class Pump (session.Pump):
     self.link = link
     self.serial = serial
 
-  def power_control (self, minutes=None):
-    """ Control Pumping """
-    log.info('BEGIN POWER CONTROL %s' % self.serial)
-    self.command = commands.PowerControl(**dict(minutes=minutes, serial=self.serial))
-    repeater = Repeater(self.link)
+  # Sends a few attempts at getting the pump model. If the pump responds to these,
+  # then it's awake
+  def check_pump_awake (self):
+    try:
+      self.model = self.read_model()
+    except (CommsException, InvalidPacketReceived):
+      pass
 
-    status = repeater(self.command, repetitions=500, ack_wait_seconds=20)
-
-    if status:
+    if len(self.model.getData( )) == 3:
       return True
     else:
-      raise CommsException("No acknowledgement from pump on wakeup. Is it out of range or is the battery too low?")
+      return False
+
+  def power_control (self, minutes=None):
+    """ Control Pumping """
+
+    # See if the pump is on and responding to messages. If it isn't, then
+    # we need to send a wakeup to the pump
+    if self.check_pump_awake():
+      log.info('Pump %s is already responding. Not sending wakeup messages' % self.serial)
+      return True
+    else:
+      log.info('BEGIN POWER CONTROL %s' % self.serial)
+      self.command = commands.PowerControl(**dict(minutes=minutes, serial=self.serial))
+      repeater = Repeater(self.link)
+
+      status = repeater(self.command, repetitions=500, ack_wait_seconds=20)
+
+      if status:
+        return True
+      else:
+        raise CommsException("No acknowledgement from pump on wakeup. Is it out of range or is the battery too low?")
 
   def execute (self, command):
     command.serial = self.serial
 
     for retry_count in range(self.STANDARD_RETRY_COUNT):
       try:
-          sender = Sender(self.link)
-          return sender(command)
+        sender = Sender(self.link)
+        return sender(command)
       except (CommsException, AssertionError) as e:
-          log.error("Timed out or other comms exception - %s - retrying: %s of %s" % (e, retry_count, self.STANDARD_RETRY_COUNT))
-          time.sleep(self.RETRY_BACKOFF * retry_count)
+        log.error("Timed out or other comms exception - %s - retrying: %s of %s" % (e, retry_count, self.STANDARD_RETRY_COUNT))
+        time.sleep(self.RETRY_BACKOFF * retry_count)

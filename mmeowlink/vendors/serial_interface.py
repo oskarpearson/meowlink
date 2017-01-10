@@ -22,9 +22,14 @@ class SerialInterface (object):
       if fuser.in_use(self.device):
         raise AlreadyInUseException("%s already in use" % self.device)
 
-      self.serial = serial.Serial( self.device, self.speed )
-      self.clear_receive_buffer('New port open')
-      self.check_setup()
+      if self.device.find('spi') >= 0:
+        import spi_serial
+        self.serial = spi_serial.SpiSerial()
+        self.check_setup()
+      else:
+        self.serial = serial.Serial( self.device, self.speed )
+        self.clear_receive_buffer('New port open')
+        self.check_setup()
 
     return True
 
