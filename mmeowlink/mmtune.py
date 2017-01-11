@@ -46,7 +46,7 @@ class MMTune:
           if results[0][1] == 5 and results[0][2] > -80:
             output = {'scanDetails': results, 'setFreq': testFreq, 'usedDefault': False}
             return output
-      except ValueError:
+      except (ValueError, KeyError):
         pass 
 
     #print "scanning..."
