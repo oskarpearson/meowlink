@@ -12,7 +12,7 @@ class MMTune:
     'WW': { 'start': 868.150, 'end': 868.750, 'default': 868.328 }
   }
 
-  def __init__(self, link, pumpserial, radio_locale='US'):
+  def __init__(self, link, pumpserial, radio_locale='WW'):
     self.link = link
 
     # MMTune can only be used with the SubgRfspy firmware, as MMCommander
