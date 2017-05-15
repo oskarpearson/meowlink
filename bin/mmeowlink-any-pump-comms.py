@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
   # app.run doesn't return the call status, so we need to interrogate the object:
   if app.app_result == 0:
-    print("No pump comms detected from other rigs (this is a good thing!)")
+    print("No interfering pump comms detected from other rigs (this is a good thing!)")
   else:
     print("Comms with pump detected")
 
