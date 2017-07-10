@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='mmeowlink',
-    version='0.11.0',
+    version='0.11.1',
     description='Driver layer for communicating with Medtronic pumps over a variety of radios',
     packages=find_packages(),
     include_package_data=True,
