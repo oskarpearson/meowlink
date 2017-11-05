@@ -38,7 +38,7 @@ class SubgRfspyLink(SerialInterface):
 
   # Which version of subg_rfspy do we support?
   UINT16_TIMEOUT_VERSIONS = ["0.6"]
-  SUPPORTED_VERSIONS = ["0.6", "0.7", "0.8", "0.9"]
+  SUPPORTED_VERSIONS = ["0.6", "0.7", "0.8", "0.9", "1.0"]
 
   RFSPY_ERRORS = {
     0xaa: "Timeout",
