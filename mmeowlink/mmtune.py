@@ -72,7 +72,7 @@ class MMTune:
     error_count = 0
     rssi_readings = []
     for i in xrange(sample_size):
-      self.send_packet("a7" + self.pumpserial + "8d00") # Get Model
+      self.send_packet("a7" + self.pumpserial + "8000") # DO not use 8d00 (get model), as it fails on 512/712. Use 8000 (get history). 
       try:
         packet = self.get_packet(0.080)
         success_count += 1
