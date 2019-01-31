@@ -175,7 +175,7 @@ class Repeater (Sender):
     try:
       self.wait_for_ack(timeout=ack_wait_seconds)
       return True
-    except CommsException, InvalidPacketReceived:
+    except CommsException as InvalidPacketReceived:
       log.error("%s - Response not received - retrying" % time.time())
 
     return False

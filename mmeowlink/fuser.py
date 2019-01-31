@@ -1,3 +1,4 @@
+from __future__ import print_function
 # From https://github.com/bewest/decoding-carelink/blob/314406d5d6025321dbe1a7d48a202b608df41c30/decocare/fuser.py
 # This still has race conditions, but is better than nothing for the moment,
 # as not all other apps use lock files
@@ -22,4 +23,4 @@ def in_use (device):
 if __name__ == '__main__':
   from scan import scan
   candidate = (sys.argv[1:2] or [scan( )]).pop( )
-  print in_use(candidate)
+  print(in_use(candidate))

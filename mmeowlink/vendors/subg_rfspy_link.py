@@ -14,6 +14,11 @@ from .. exceptions import InvalidPacketReceived, CommsException, SubgRfspyVersio
 from serial_interface import SerialInterface
 from serial_rf_spy import SerialRfSpy
 
+try:
+  long
+except NameError:
+  long = int
+
 io  = logging.getLogger( )
 log = io.getChild(__name__)
 

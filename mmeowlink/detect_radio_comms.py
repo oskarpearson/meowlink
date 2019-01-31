@@ -1,3 +1,4 @@
+from __future__ import print_function
 import time
 
 from datetime import datetime
@@ -24,16 +25,16 @@ class DetectRadioComms(object):
       hex_string = None
 
       try:
-        if type(self.link) == SubgRfspyLink:
+        if isinstance(self.link, SubgRfspyLink):
           resp = self.link.get_packet(timeout=1)
           hex_string = hexify(resp['data']).upper()
-        elif type(self.link) == MMCommanderLink:
+        elif isinstance(self.link, MMCommanderLink):
           resp = self.link.read(timeout=1)
           hex_string = hexify(resp).upper()
       except CommsException as e:
         pass
       except InvalidPacketReceived:
-        print "%s (N/A db) - Corrupt packet" % datetime.now()
+        print("%s (N/A db) - Corrupt packet" % datetime.now())
 
       # EG:   A7 12 31 23 22 5D .. ..
       # POS:  01234567890123456789

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 
 from mmeowlink.mmtune import MMTune
@@ -25,4 +26,4 @@ class MMTuneApp(BaseMMeowlinkApp):
   def main(self, args):
     tuner = MMTune(self.link, args.serial, args.radio_locale)
     output = tuner.run()
-    print json.dumps(output, sort_keys=True,indent=4, separators=(',', ': '))
+    print(json.dumps(output, sort_keys=True,indent=4, separators=(',', ': ')))

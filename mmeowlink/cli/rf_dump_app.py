@@ -1,3 +1,4 @@
+from __future__ import print_function
 from datetime import datetime
 
 from .. hex_handling import hexify
@@ -31,16 +32,16 @@ class RfDumpApp(BaseMMeowlinkApp):
   def main(self, args):
     while True:
       try:
-        if type(self.link) == SubgRfspyLink:
+        if isinstance(self.link, SubgRfspyLink):
           resp = self.link.get_packet(timeout=1)
           ts = datetime.now()
-          print "%s (%d db) - %s" % (ts, resp['rssi'], hexify(resp['data']).upper())
-        elif type(self.link) == MMCommanderLink:
+          print("%s (%d db) - %s" % (ts, resp['rssi'], hexify(resp['data']).upper()))
+        elif isinstance(self.link, MMCommanderLink):
           resp = self.link.read(timeout=1)
           ts = datetime.now()
-          print "%s (N/A db) - %s" % (ts, hexify(resp).upper())
+          print("%s (N/A db) - %s" % (ts, hexify(resp).upper()))
       except CommsException as e:
         pass
       except InvalidPacketReceived:
         ts = datetime.now()
-        print "%s (N/A db) - Corrupt packet" % ts
+        print("%s (N/A db) - Corrupt packet" % ts)

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
 
+from __future__ import print_function
 from decocare import commands
 from decocare import lib
 from base_mmeowlink_app import BaseMMeowlinkApp
@@ -69,7 +70,7 @@ class BolusApp (BaseMMeowlinkApp):
       return
 
   def main (self, args):
-    print args
+    print(args)
     self.bolus(args);
 
   def bolus (self, args):
